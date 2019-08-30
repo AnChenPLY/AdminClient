@@ -1,8 +1,12 @@
 import React, { Component } from "react";
-import { Form, Icon, Input, Button } from "antd";
+import { Form, Icon, Input, Button,message } from "antd";
+import {Redirect} from 'react-router-dom'
 
+import memoryUtils from '../../utils/memoryUtils'
+import storageUtils from '../../utils/storageUtils';
+import {reqLogin} from '../../api/index'
 import "./login.less";
-import logo from "./images/logo.png";
+import logo from "../../assets/images/logo.png";
 class Login extends Component {
     handleSubmit = e => {
         e.preventDefault(); //阻止表但提交的默认事件
@@ -15,9 +19,22 @@ class Login extends Component {
         // console.log(values, username, password);
 
         //对表单现有字段统一验证
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async(err, {username,password}) => {
             if (!err) {
-              alert(`发登陆的ajax请求,username=${values.username},password=${values.password}`)
+                // alert(`发登陆的ajax请求,username=${username},password=${password}`)
+                const result=await reqLogin(username,password)
+                //登陆成功
+                if(result.status===0){
+                    //将use信息保存到local中
+                    const user =result.data
+                    storageUtils.saveUSer(user)
+                    memoryUtils.user=user
+                    // localStorage.setItem('user_key',JSON.stringify(user))
+                    this.props.history.replace('/')
+                    message.success('登陆成功')
+                }else{
+                    message.error(result.msg)
+                }
             }else{
                 //alert('验证失败')
             }
@@ -43,6 +60,11 @@ class Login extends Component {
         }
     }
     render() {
+        //读取保存的user，如果存在，直接跳转到管理界面
+        const user =memoryUtils.user
+        if(!user._id){
+           return <Redirect to='/' />//自动跳转大片指定的路由路径
+        }
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="login">
@@ -84,6 +106,7 @@ class Login extends Component {
                             })(
                                 (
                                     <Input
+                                        type='password'
                                         prefix={
                                             <Icon
                                                 type="user"
