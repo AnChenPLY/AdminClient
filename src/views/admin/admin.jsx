@@ -22,7 +22,7 @@ export default class Admin extends Component {
         //读取保存的user,如果不存在，直接跳转到登陆界面
         const user = memoryUtils.user;
         if (!user._id) {
-            return <Redirect to="/login" />; //自动跳转大片指定的路由路径
+            return <Redirect to="/login" />; //自动跳转到指定的路由路径
         }
         return (
             <Layout style={{height:'100%'}}>
@@ -31,7 +31,7 @@ export default class Admin extends Component {
                 </Sider>
                 <Layout>
                    <Header />
-                    <Content style={{backgroundColor:"pink"}}>
+                    <Content style={{backgroundColor:"white" ,margin:'20px'}}>
                         <Switch>
                             <Route path='/home' component={Home}/>
                             <Route path='/category' component={Category}/>

@@ -56,9 +56,9 @@ class LeftNav extends Component {
         执行异步任务:发ajax请求，启动定时器
 
      */
-    componentDidMount(){
+    // componentDidMount(){
 
-    }
+    // }
     /*
         第一次render前执行一次
         为第一次render()做一些同步的准备工作
