@@ -27,7 +27,7 @@ class Login extends Component {
                 if(result.status===0){
                     //将use信息保存到local中
                     const user =result.data
-                    storageUtils.saveUSer(user)
+                    storageUtils.saveUser(user)
                     memoryUtils.user=user
                     // localStorage.setItem('user_key',JSON.stringify(user))
                     this.props.history.replace('/')

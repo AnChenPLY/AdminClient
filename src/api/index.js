@@ -53,75 +53,75 @@ export const reqUpdateCategory = ({categoryId, categoryName}) => ajax.post(BASE 
   categoryName
 })
 
-// // 根据分类id获取分类
-// export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', {
-//   params: {
-//     categoryId
-//   }
-// })
+// 根据分类id获取分类
+export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', {
+  params: {
+    categoryId
+  }
+})
 
 // /* 获取商品分页列表 */
-// export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/manage/product/list', {
-//   params: { // 包含所有query参数的对象
-//     pageNum,
-//     pageSize
-//   }
-// })
+export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/manage/product/list', {
+  params: { // 包含所有query参数的对象
+    pageNum,
+    pageSize
+  }
+})
 
 // /* 根据Name/desc搜索产品分页列表 */
-// export const reqSearchProducts = ({
-//     pageNum,
-//     pageSize,
-//     searchName,
-//     searchType // 它的值是'productName'或者'productDesc'
-//   }) => ajax(BASE + '/manage/product/search', {
-//   // method: 'GET',
-//   params: {
-//     pageNum,
-//     pageSize,
-//     [searchType]: searchName,
-//   }
-// })
+export const reqSearchProducts = ({
+    pageNum,
+    pageSize,
+    searchName,
+    searchType // 它的值是'productName'或者'productDesc'
+  }) => ajax(BASE + '/manage/product/search', {
+  // method: 'GET',
+  params: {
+    pageNum,
+    pageSize,
+    [searchType]: searchName,
+  }
+})
 
 // /* 根据商品ID获取商品 */
-// export const reqProduct = (productId) => ajax(BASE + '/manage/product/info', {
-//   params: { 
-//     productId
-//   }
-// })
+export const reqProduct = (productId) => ajax(BASE + '/manage/product/info', {
+  params: { 
+    productId
+  }
+})
 
 // /* 对商品进行上架/下架处理 */
-// export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', {
-//   method: 'POST',
-//   data: {
-//     productId,
-//     status
-//   }
-// })
+export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', {
+  method: 'POST',
+  data: {
+    productId,
+    status
+  }
+})
 
-// /* 删除图片 */
-// export const reqDeleteImg = (name) => ajax.post(BASE + '/manage/img/delete', {name})
+/* 删除图片 */
+export const reqDeleteImg = (name) => ajax.post(BASE + '/manage/img/delete', {name})
 
-// /* 添加/修改商品 */
-// export const reqAddUpdateProduct = (product) => ajax.post(
-//     BASE + '/manage/product/' + (product._id ? 'update' : 'add'), 
-//     product
-// )
+/* 添加/修改商品 */
+export const reqAddUpdateProduct = (product) => ajax.post(
+    BASE + '/manage/product/' + (product._id ? 'update' : 'add'), 
+    product
+)
 
 // // 获取所有角色的列表
-// export const reqRoles = () => ajax(BASE + '/manage/role/list')
-// // 添加角色
-// export const reqAddRole = (roleName) => ajax.post(BASE + '/manage/role/add', {
-//   roleName
-// })
+export const reqRoles = () => ajax(BASE + '/manage/role/list')
+// // 添加角色 
+export const reqAddRole = (roleName) => ajax.post(BASE + '/manage/role/add', {
+  roleName
+})
 // // 更新角色
-// export const reqUpdateRole = (role) => ajax.post(BASE + '/manage/role/update', role)
+export const reqUpdateRole = (role) => ajax.post(BASE + '/manage/role/update', role)
 
 // // 获取所有用户的列表
-// export const reqUsers = () => ajax(BASE + '/manage/user/list')
+export const reqUsers = () => ajax(BASE + '/manage/user/list')
 // // 删除指定用户
-// export const reqDeleteUser = (userId) => ajax.post(BASE + '/manage/user/delete', {
-//   userId
-// })
+export const reqDeleteUser = (userId) => ajax.post(BASE + '/manage/user/delete', {
+  userId
+})
 // // 添加/更新用户
-// export const reqAddOrUpdateUser = (user) => ajax.post(BASE + '/manage/user/' + (user._id ? 'update' : 'add'), user)
+export const reqAddOrUpdateUser = (user) => ajax.post(BASE + '/manage/user/' + (user._id ? 'update' : 'add'), user)
