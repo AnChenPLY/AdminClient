@@ -5,6 +5,7 @@ import { Menu, Icon } from "antd";
 import logo from "../../assets/images/logo.png";
 import "./index.less";
 import menuList from "../../config/menuConfig";
+import memoryUtils from '../../utils/memoryUtils'
 
 const { SubMenu } = Menu;
 
@@ -13,42 +14,73 @@ class LeftNav extends Component {
         根据指定的menu数据组成<MenuItem>和<SunMenu>的数组
         map + 函数递归
      */
+
+    // 判断当前用户是否有item对应的权限
+    hasAuth = item => {
+        const user = memoryUtils.user;
+        const menus = user.role.menus;
+        //得到抢钱用户的所有权限
+        //1.如果当前用户是admin
+        //2.如果item为公开的
+        //3.当前用户有次item权限
+        if (
+            user.username === "admin" ||
+            item.public ||
+            menus.indexOf(item.key) !== -1
+        ) {
+            return true;
+        } else if (item.children) {
+            //4.如果当前用户的某个字节点的权限，当前item页应该显示
+            const cItem = item.children.find(
+                cItem => menus.indexOf(cItem.key) !== -1
+            );
+            return !!cItem;
+        }
+
+        return false;
+    };
+
     getMenuNode = menuList => {
         const path = this.props.location.pathname;
         return menuList.map(item => {
-            if (!item.children) {
-                return (
-                    <Menu.Item key={item.key}>
-                        <NavLink to={item.key}>
-                            <Icon type={item.icon} />
-                            <span>{item.title}</span>
-                        </NavLink>
-                    </Menu.Item>
-                );
-            } else {
-                /*
+            //判断当前用户是否有item对应的权限
+            if (this.hasAuth(item)) {
+                if (!item.children) {
+                    return (
+                        <Menu.Item key={item.key}>
+                            <NavLink to={item.key}>
+                                <Icon type={item.icon} />
+                                <span>{item.title}</span>
+                            </NavLink>
+                        </Menu.Item>
+                    );
+                } else {
+                    /*
                     判断当前Item的key是否是我需要的openkey
                     查找item的所有children中Item中的key，看是否有一个根请求的path匹配
                  */
-                const cItem = item.children.find(
-                    cItem => path.indexOf(cItem.key) === 0
-                );
-                if (cItem) {
-                    this.openkey = item.key;
+                    const cItem = item.children.find(
+                        cItem => path.indexOf(cItem.key) === 0
+                    );
+                    if (cItem) {
+                        this.openkey = item.key;
+                    }
+                    return (
+                        <SubMenu
+                            key={item.key}
+                            title={
+                                <span>
+                                    <Icon type={item.icon} />
+                                    <span>{item.title}</span>
+                                </span>
+                            }
+                        >
+                            {this.getMenuNode(item.children)}
+                        </SubMenu>
+                    );
                 }
-                return (
-                    <SubMenu
-                        key={item.key}
-                        title={
-                            <span>
-                                <Icon type={item.icon} />
-                                <span>{item.title}</span>
-                            </span>
-                        }
-                    >
-                        {this.getMenuNode(item.children)}
-                    </SubMenu>
-                );
+            }else {
+                return false
             }
         });
     };
