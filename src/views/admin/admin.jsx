@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Redirect,Switch,Route } from "react-router-dom";
 import { Layout } from "antd";
+import {connect} from 'react-redux'
 
-import memoryUtils from "../../utils/memoryUtils";
 import LeftNav from "../../components/left-nav";
 import Header from '../../components/header'
 import Home from '../home/home'
@@ -17,10 +17,10 @@ import Pie from '../charts/pie'
 const {  Footer, Sider, Content } = Layout;
 
 
-export default class Admin extends Component {
+ class Admin extends Component {
     render() {
         //读取保存的user,如果不存在，直接跳转到登陆界面
-        const user = memoryUtils.user;
+        const user = this.props.user
         if (!user._id) {
             return <Redirect to="/login" />; //自动跳转到指定的路由路径
         }
@@ -50,3 +50,7 @@ export default class Admin extends Component {
         );
     }
 }
+export default connect(
+    state=>({user:state.user}),
+    {}
+)(Admin)

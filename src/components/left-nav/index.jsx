@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import { Menu, Icon } from "antd";
+import { connect } from "react-redux";
 
+import { setHeaderTitle } from "../../redux/actions";
 import logo from "../../assets/images/logo.png";
 import "./index.less";
 import menuList from "../../config/menuConfig";
-import memoryUtils from '../../utils/memoryUtils'
 
 const { SubMenu } = Menu;
 
@@ -17,9 +18,9 @@ class LeftNav extends Component {
 
     // 判断当前用户是否有item对应的权限
     hasAuth = item => {
-        const user = memoryUtils.user;
+        const user =this.props.user;
         const menus = user.role.menus;
-        //得到抢钱用户的所有权限
+        //得到当前用户的所有权限
         //1.如果当前用户是admin
         //2.如果item为公开的
         //3.当前用户有次item权限
@@ -46,9 +47,18 @@ class LeftNav extends Component {
             //判断当前用户是否有item对应的权限
             if (this.hasAuth(item)) {
                 if (!item.children) {
+                    //找到path对应的item，更新headerTitle状态，值是item的title
+                    if(item.key===path || path.indexOf(item.key)===0){
+                        this.props.setHeaderTitle(item.title)
+                    }
                     return (
                         <Menu.Item key={item.key}>
-                            <NavLink to={item.key}>
+                            <NavLink
+                                to={item.key}
+                                onClick={() =>
+                                    this.props.setHeaderTitle(item.title)
+                                }
+                            >
                                 <Icon type={item.icon} />
                                 <span>{item.title}</span>
                             </NavLink>
@@ -79,8 +89,8 @@ class LeftNav extends Component {
                         </SubMenu>
                     );
                 }
-            }else {
-                return false
+            } else {
+                return false;
             }
         });
     };
@@ -163,7 +173,10 @@ class LeftNav extends Component {
 高阶组件LeftNav传递3个特别属性：history/location/match
 结果：LeftNav可以操作路由相关的语法
 */
-export default withRouter(LeftNav);
+export default connect(
+    state => ({user:state.user}),
+    { setHeaderTitle }
+)(withRouter(LeftNav));
 
 /*
     2个问题

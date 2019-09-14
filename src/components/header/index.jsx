@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Modal } from "antd";
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
-import LinkButton from '../link-button';
+import { logout } from '../../redux/actions'
+import LinkButton from "../link-button";
 import { reqWeather } from "../../api";
 import { formateDate } from "../../utils/dateUtils";
 import menuList from "../../config/menuConfig";
-import memoryUtils from "../../utils/memoryUtils";
-import storageUtils from "../../utils/storageUtils";
 import "./index.less";
 
 class Header extends Component {
@@ -26,12 +26,7 @@ class Header extends Component {
             onOk: () => {
                 console.log("OK");
                 //确定后,删除用户信息
-                //local中的
-                storageUtils.removeUser();
-                //内存中的
-                memoryUtils.user = {};
-                //跳转到登陆界面
-                this.props.history.replace("/login");
+                this.props.logout()
             },
             onCancel() {
                 console.log("Cancel");
@@ -62,12 +57,12 @@ class Header extends Component {
         获取天气信息
      */
     getWeather = async () => {
-        const {dayPictureUrl,weather} = await reqWeather("杭州");
+        const { dayPictureUrl, weather } = await reqWeather("杭州");
         //更新状态
         this.setState({
             dayPictureUrl,
             weather
-        })
+        });
     };
 
     componentDidMount() {
@@ -77,34 +72,32 @@ class Header extends Component {
             });
         }, 1000);
         //发jsonp请求获取天气信息
-        this.getWeather()
-
+        this.getWeather();
     }
     componentWillUnmount() {
         clearInterval(this.intervalId);
     }
 
     render() {
-        const { currentTime,dayPictureUrl,weather } = this.state;
-        const user = memoryUtils.user;
+        const { currentTime, dayPictureUrl, weather } = this.state;
+        const user = this.props.user;
         //得到当前显示的title
-        const title = this.getTitle();
+        // const title = this.getTitle();
+        const title = this.props.headerTitle
         return (
             <div className="header">
                 <div className="header-top">
                     欢迎 ,&nbsp;{user.username}&nbsp;
-                    {//组件的标签体作为标签的children属性传入
+                    {
+                        //组件的标签体作为标签的children属性传入
                         <LinkButton onClick={this.logout}>退出</LinkButton>
-                    } 
+                    }
                 </div>
                 <div className="header-bottom">
                     <div className="header-bottom-left">{title}</div>
                     <div className="header-bottom-right">
                         <span>{currentTime}</span>
-                        <img
-                            src={dayPictureUrl}
-                            alt="weather"
-                        />
+                        <img src={dayPictureUrl} alt="weather" />
                         <span>{weather}</span>
                     </div>
                 </div>
@@ -112,4 +105,7 @@ class Header extends Component {
         );
     }
 }
-export default withRouter(Header);
+export default connect(
+    state => ({ headerTitle: state.headerTitle,user:state.user }), //state:总状态 {headerTitle,user}
+    {logout}
+)(withRouter(Header));
