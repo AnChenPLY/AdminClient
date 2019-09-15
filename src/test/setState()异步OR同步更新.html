@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+        setState()更新状态是同步还是异步？
+        1).执行setState()的位置？
+            在react控制的回调函数中：生命周期勾子/react事件监听回调
+            在非react控制的异步回调函数中：定时器回调/原生事件监听回调/promise回调/...App
+        2)异步OR同步？
+            react相关的回调中：异步
+            其他异步的回调中：同步
+        关于异步的setState()
+            1).多次调用，如何处理？
+                    setState({}):合并更新一次状态，只调用一次render()更新界面 ---状态更新和界面更新
+                    this.setState({count:this.state.count+1})//count:this.state.count+1发生在更新前
+                    setState(fn):更新多次状态，但只调用一次render()更新界面 --状态更新没有合并，但界面更新合并了
+                    this.setState(state=>({count:state.count+1}))//count:state.count+1发生在更新时
+            2).如何得到异步更新后的状态数据？
+                在setState()中的callback回调函数中        
+
+        */
+       
+    </script>
+</body>
+</html>
